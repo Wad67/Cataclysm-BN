@@ -80,6 +80,7 @@ void tree_maple_tapped( player &p, const tripoint &examp );
 void shrub_marloss( player &p, const tripoint &examp );
 void tree_marloss( player &p, const tripoint &examp );
 void shrub_wildveggies( player &p, const tripoint &examp );
+void recycle_smelter( player &p, const tripoint &examp );
 void recycle_compactor( player &p, const tripoint &examp );
 void trap( player &p, const tripoint &examp );
 void water_source( player &p, const tripoint &examp );

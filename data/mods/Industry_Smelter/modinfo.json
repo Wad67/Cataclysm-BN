@@ -1,0 +1,60 @@
+[
+  {
+    "type": "MOD_INFO",
+    "ident": "industry_smelter",
+    "name": "Smelter",
+    "authors": "Wad67",
+    "description": "Adds a buildable smelter which functions as a recycler",
+    "category": "items",
+    "dependencies": [ "dda" ]
+  },
+  {
+    "type": "construction",
+    "id": "constr_smelter",
+    "description": "Build Smelter",
+    "category": "FURN",
+    "required_skills": [ [ "fabrication", 4 ] ],
+    "time": "120 m",
+    "qualities": [ [ { "id": "DIG", "level": 2 } ], [ { "id": "HAMMER", "level": 2 } ] ],
+    "components": [
+      [ [ "rock", 40 ] ],
+      [ [ "material_cement", 50 ], [ "mortar_build", 1 ], [ "clay_lump", 12 ] ],
+      [ [ "water", 2 ], [ "water_clean", 2 ] ]
+    ],
+    "pre_note": "Can be deconstructed without tools.",
+    "pre_special": "check_empty",
+    "post_terrain": "f_smelter"
+  },
+  {
+    "type": "furniture",
+    "id": "f_smelter",
+    "name": "smelter",
+    "description": "Metalworking station typically used to melt down and cast a variety of metals",
+    "symbol": "*",
+    "color": "red",
+    "move_cost_mod": -1,
+    "coverage": 40,
+    "required_str": -1,
+    "max_volume": "2000 L",
+    "flags": [ "TRANSPARENT", "REDUCE_SCENT", "PERMEABLE" ],
+    "bash": {
+      "str_min": 10,
+      "str_max": 35,
+      "sound": "crash!",
+      "sound_fail": "whump.",
+      "items": [
+        { "item": "rock", "charges": [ 25, 40 ] },
+        { "item": "pipe", "count": [ 0, 1 ] },
+        { "item": "clay_lump", "count": [ 1, 10 ] }
+      ]
+    },
+    "deconstruct": {
+      "items": [
+        { "item": "rock", "charges": [ 30, 40 ] },
+        { "item": "pipe", "count": [ 1, 1 ] },
+        { "item": "clay_lump", "count": [ 5, 12 ] }
+      ]
+    },
+    "examine_action": "recycle_smelter"
+  }
+]
