@@ -3464,130 +3464,176 @@ const int MIN_CHARCOAL = 25;
 const int CHARCOAL_PER_KG = 25;
 const units::volume MAX_METAL_VOLUME = units::from_liter( 200 );
 } // namespace sm_rack
+
+/*
+
+Current intended logic:
+
+
+If all materials of an item have "burn_products" and/or "compacts_into", but not "burn_data", check to see if it can be dismantled first.
+If it can be dismantled, dismantle it and place the components inside the smelter. 
+Repeat check untill there is nothing left with these properties that can be dismantled.
+item::is_salvageable()
+ m->salvaged_into().has_value();
+
+If it is a container, empty it first (Maybe do this in v2)
+item::is_container()
+item::can_unload_liquid()
+item::spill_contents( const tripoint &pos )
+
+If it can contain ammo, attempt to empty ammo (v2?)
+item::ammo_data()
+
+
+
+
+(This is for cases such as rings, containing gemstones, etc) It'd be better to treat a whole item as 
+its individual components as the material fields are likely to be more granular.
+
+If material possesses "compacts_into" field, use that.
+If there is no "compacts_into" field but material possesses "burn_data" convert it to fuel.
+  -> imply the highest burning value
+  -> if value is negative, just yeet it into the immaterium
+  -> if it has a burn product, and that product is ash, use that value for ash production, otherwise just use a small flat value
+If there is not "burn_data" and material possesses "burn_products" convert it into those.
+If there are no relevant properties at all, segfault
+Cheese should be refined into cheese ingots, some kind of high explosive
+
+
+material_type::burn_data( size_t intensity )
+material_type::burn_products()
+material_type::compacts_into()
+
+material_type::salvaged_into() *May not be appropriate, better to use itype dissassembly 
+
+Material scratch sheet:
+
+* denotes a material that should have at least one of these properties but doesn't
+** denotes a material that should make it through the smelter unscathed 
+
+
+Alcohol						     ->  "burn_data"
+Resin                            ->  "burn_products": [ [ "resin_chunk", 1 ] ]
+Aluminum                         ->  "compacts_into": [ "material_aluminium_ingot", "aluminum_foil" ]
+Biosilicified Chitin             ->  "burn_data"
+Bone                             ->  "burn_data"
+Brass                            ->  *
+Bronze                           ->  "compacts_into": [ "scrap_bronze" ]
+Budget Steel                     ->  "burn_products": [ [ "scrap", 1 ] ]
+Cardboard                        ->  "burn_data"
+Ceramic                          ->  *
+Dragon Scale                     ->  *
+Chitin                           ->  "burn_data"
+Clay                             ->  "burn_products": [ [ "ceramic_shard", 1 ] ]
+Copper                           ->  "compacts_into": [ "scrap_copper", "copper" ]
+Cotton                           ->  "burn_data"
+Diamond                          ->  **
+Gemstone                         ->  **
+Egg                              ->  "burn_data"
+Flesh                            ->  "burn_data"
+Gutskin                          ->  "burn_data"
+Fresh Clay                       ->  "burn_products": [ [ "ceramic_shard", 1 ] ]
+Fruit Matter                     ->  "burn_data"
+Fur                              ->  "burn_data"
+Faux Fur                         ->  "burn_data"
+Glass                            ->  "burn_products": [ [ "glass_shard", 1 ] ]
+Gold                             ->  "compacts_into": [ "gold_small" ]
+Hard Steel                       ->  "burn_products": [ [ "scrap", 1 ] ]
+Human Flesh                      ->  "burn_data"
+Honey                            ->  "burn_data"
+Hydrocarbons                     ->  "burn_data"
+Insect Flesh                     ->  "burn_data"
+Iron                             ->  "burn_products": [ [ "scrap", 1 ] ]
+Junk Food                        ->  "burn_data"
+Foodplace' delicious foodstuff   ->  * copy of junk food, why does this need to exist?
+Kevlar                           ->  *
+Rigid Kevlar                     ->  *
+Lead                             ->  "compacts_into": [ "lead" ]
+Leather                          ->  "burn_data"
+Lycra                            ->  "burn_data"
+Dairy                            ->  "burn_data"
+Neoprene                         ->  "burn_data"
+Nomex                            ->  ** 
+Unknown                          ->  *???
+Oil                              ->  "burn_data"
+Paper                            ->  "burn_data"
+Dry Plant                        ->  "burn_data"
+Plastic                          ->  "burn_data"
+Powder                           ->  "burn_data"
+powder_nonflam                   ->  **
+cac2powder                       ->  *
+Silver                           ->  "compacts_into": [ "silver_small" ]
+Platinum                         ->  "compacts_into": [ "platinum_small" ]
+Rubber                           ->  "burn_data"
+Steel                            ->  "compacts_into": [ "sheet_metal", "steel_lump", "steel_chunk", "scrap" ]
+Stone                            ->  "burn_products": [ [ "pebble", 1 ] ]
+Superalloy                       ->  "compacts_into": [ "alloy_sheet" ]
+layered carbide                  ->  *
+Synthetic Fabric                 ->  "burn_data"
+Tin                              ->  "compacts_into": [ "tin" ]
+Vegetable Matter                 ->  "burn_data"
+Tomato                           ->  "burn_data"
+Bean                             ->  "burn_data"
+Garlic                           ->  "burn_data"
+Nut                              ->  "burn_data"
+Mushroom                         ->  "burn_data"
+Water                            ->  "burn_data", negative values, really?
+Wheat                            ->  "burn_data"
+Wood                             ->  "burn_data"
+Feces                            ->  "burn_data"
+Dried Vegetable                  ->  "burn_data"
+Cured Meat                       ->  "burn_data"
+Processed Food                   ->  "burn_data"
+Cheese                           ->  "burn_data", who knew cheese put out fires
+Ice Cream                        ->  "burn_data", more negatives
+Soil                             ->  "burn_products": [ [ "material_soil", 1 ] ]
+Zinc                             ->  "compacts_into": [ "zinc_metal" ]
+
+
+
+
+
+
+
+
+*/
 void iexamine::recycle_smelter( player &p, const tripoint &examp )
 {
+	auto material_list = materials::get_all();
 	uilist select_option;
 	select_option.addentry( _("Smelt"));
 	select_option.addentry( _("Load/Unload Charcoal"));
-	select_option.addentry( _("Process Items for smelting"));
 	select_option.query();
 	int sel_option_ret = select_option.ret;
-	if(sel_option_ret < 0 || sel_option_ret > 2){
+	if(sel_option_ret < 0 || sel_option_ret > 1){
 		add_msg( _( "Never mind."));
 	}
 	if(sel_option_ret == 1){
 		reload_furniture( p, examp );
 	}
-	if(sel_option_ret == 2){
-		add_msg( _( "Never mind."));
-	}
 	if(sel_option_ret == 0){
-		auto metals = materials::get_compactable();
-		uilist choose_metal;
-		choose_metal.text = _( "Smelt what metal?" );
-		for( auto &m : metals ) {
-			choose_metal.addentry( m.name() );
-		}
-		choose_metal.query();
-		int m_idx = choose_metal.ret;
-		if( m_idx < 0 || m_idx >= static_cast<int>( metals.size() ) ) {
-			add_msg( _( "Never mind." ) );
-			return;
-		}
-		material_type m = metals.at( m_idx );
-
-		// check inputs and tally total mass
 		auto inputs = g->m.i_at( examp );
-		units::mass sum_weight = 0_gram;
-		auto ca = m.compact_accepts();
-		std::set<material_id> accepts( ca.begin(), ca.end() );
-		accepts.insert( m.id );
+		//units::mass sum_weight = 0_gram;
+
 		for( auto &input : inputs ) {
-			if( !input.only_made_of( accepts ) ) {
-				//~ %1$s: an item in the compactor , %2$s: desired compactor output material
-				add_msg( _( "You realize this isn't going to work because %1$s is not made purely of %2$s." ),
-						 input.tname(), m.name() );
-				return;
-			}
-			if( input.is_container() && !input.is_container_empty() ) {
-				//~ %1$s: an item in the compactor
-				add_msg( _( "You realize this isn't going to work because %1$s has not been emptied of its contents." ),
-						 input.tname() );
-				return;
-			}
-			sum_weight += input.weight();
+			auto materials = input.made_of_types();
+            //add_msg( _( "ITEM: %1$s is made of " ),
+            //         input.tname());
+			for( auto &m : materials){
+				add_msg( _( "MATERIAL: %1$s  " ), m->name());
+			 //if in list, add weight (divided among materials) to applicable list entry
 		}
-		if( sum_weight <= 0_gram ) {
-			//~ %1$s: desired compactor output material
-			add_msg( _( "There is no %1$s in the smelter.  Drop some metal items onto it and try again." ),
-					 m.name() );
-			return;
 		}
-
-		// See below for recover_factor (rng(6,9)/10), this
-		// is the normal value of that recover factor.
-		static const double norm_recover_factor = 8.0 / 10.0;
-		const units::mass norm_recover_weight = sum_weight * norm_recover_factor;
-
-		// choose output
-		uilist choose_output;
-		//~ %1$.3f: total mass of material in compactor, %2$s: weight units , %3$s: compactor output material
-		choose_output.text = string_format( _( "Smelt %1$.3f %2$s of %3$s into:" ),
-											convert_weight( sum_weight ), weight_units(), m.name() );
-		for( auto &ci : m.compacts_into() ) {
-			auto it = item( ci, 0, item::solitary_tag{} );
-			const int amount = norm_recover_weight / it.weight();
-			//~ %1$d: number of, %2$s: output item
-			choose_output.addentry( string_format( _( "about %1$d %2$s" ), amount,
-												   it.tname( amount ) ) );
+		for( auto &mats : material_list){
+			add_msg( _( "ML %1$s "), mats.name());
+		
 		}
-		choose_output.query();
-		int o_idx = choose_output.ret;
-		if( o_idx < 0 || o_idx >= static_cast<int>( m.compacts_into().size() ) ) {
-			add_msg( _( "Never mind." ) );
-			return;
-		}
-
-		// remove items
-		for( auto it = inputs.begin(); it != inputs.end(); ) {
-			it = inputs.erase( it );
-		}
-
-		// produce outputs
-		double recover_factor = rng( 6, 9 ) / 10.0;
-		sum_weight = sum_weight * recover_factor;
-		sounds::sound( examp, 80, sounds::sound_t::combat, _( "HISS!" ), true, "tool", "compactor" );
-		bool out_desired = false;
-		bool out_any = false;
-		for( auto it = m.compacts_into().begin() + o_idx; it != m.compacts_into().end(); ++it ) {
-			const units::mass ow = item( *it, 0, item::solitary_tag{} ).weight();
-			int count = sum_weight / ow;
-			sum_weight -= count * ow;
-			if( count > 0 ) {
-				g->m.spawn_item( examp, *it, count, 1, calendar::turn );
-				if( !out_any ) {
-					out_any = true;
-					if( it == m.compacts_into().begin() + o_idx ) {
-						out_desired = true;
-					}
-				}
-			}
-		}
-
-		// feedback to user
-		if( !out_any ) {
-			add_msg( _( "The smelter melts up all the items in its hopper." ) );
-			//~ %1$s: compactor output material
-			add_msg( _( " \"No %1$s to process!\"" ), m.name() );
-			return;
-		}
-		if( !out_desired ) {
-			//~ %1$s: compactor output material
-			add_msg( _( " \"Insufficient %1$s!\"" ), m.name() );
-			add_msg( _( "It spits out an assortment of smaller pieces instead." ) );
-		}
+		add_msg( _( "Never mind."));
+		return;
 	}
-	return;
+	
+
+
 
 }
 void iexamine::recycle_compactor( player &, const tripoint &examp )
