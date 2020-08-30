@@ -36,6 +36,7 @@
     "coverage": 40,
     "required_str": -1,
     "max_volume": "2000 L",
+	"crafting_pseudo_item": "i_smelter",
     "flags": [ "TRANSPARENT", "REDUCE_SCENT", "PERMEABLE" ],
     "bash": {
       "str_min": 10,
@@ -56,5 +57,24 @@
       ]
     },
     "examine_action": "recycle_smelter"
+  },
+  {
+    "id": "i_smelter",
+    "type": "TOOL",
+    "name": { "str": "Smelter" },
+    "description": "This shouldn't be visible",
+    "weight": "8600 g",
+    "volume": "8 L",
+    "price": 20000,
+    "price_postapoc": 3000,
+    "to_hit": -2,
+    "bashing": 9,
+    "material": "steel",
+    "symbol": ";",
+    "color": "dark_gray",
+    "ammo": "charcoal",
+    "sub": "forge",
+    "max_charges": 5000,
+    "flags": [ "ALLOWS_REMOTE_USE" ]
   }
 ]
