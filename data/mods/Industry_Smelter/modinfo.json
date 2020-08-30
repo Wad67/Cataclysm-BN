@@ -36,7 +36,7 @@
     "coverage": 40,
     "required_str": -1,
     "max_volume": "2000 L",
-	"crafting_pseudo_item": "i_smelter",
+    "crafting_pseudo_item": "i_smelter",
     "flags": [ "TRANSPARENT", "REDUCE_SCENT", "PERMEABLE" ],
     "bash": {
       "str_min": 10,
@@ -56,7 +56,7 @@
         { "item": "clay_lump", "count": [ 5, 12 ] }
       ]
     },
-    "examine_action": "recycle_smelter"
+    "examine_action": "recycle_compactor"
   },
   {
     "id": "i_smelter",
