@@ -1149,6 +1149,7 @@ class item : public visitable<item>
 
         bool is_brewable() const;
         bool is_engine() const;
+        bool is_boiler() const;
         bool is_wheel() const;
         bool is_fuel() const;
         bool is_toolmod() const;
@@ -1906,6 +1907,9 @@ class item : public visitable<item>
 
         /** for combustion engines the displacement (cc) */
         int engine_displacement() const;
+
+        /** for boilers, the rate of conversion */
+        int boiler_conversion_rate() const;
         /*@}*/
 
         /**

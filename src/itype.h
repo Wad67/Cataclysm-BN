@@ -437,6 +437,15 @@ struct islot_engine {
         int displacement = 0;
 };
 
+struct islot_boiler {
+    friend Item_factory;
+    friend item;
+
+public:
+    /** boilers have a rate of conversion */
+    int conversion_rate = 0;
+};
+
 struct islot_wheel {
     public:
         /** diameter of wheel (inches) */
@@ -848,6 +857,7 @@ struct itype {
         cata::value_ptr<islot_book> book;
         cata::value_ptr<islot_mod> mod;
         cata::value_ptr<islot_engine> engine;
+        cata::value_ptr<islot_boiler> boiler;
         cata::value_ptr<islot_wheel> wheel;
         cata::value_ptr<islot_fuel> fuel;
         cata::value_ptr<islot_gun> gun;

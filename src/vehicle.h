@@ -1189,6 +1189,8 @@ class vehicle
         // Produce and consume electrical power, with excess power stored or
         // taken from batteries.
         void power_parts();
+        // Produce fuels and consume other fuels or items
+        void process_boilers();
 
         /**
          * Try to charge our (and, optionally, connected vehicles') batteries by the given amount.
@@ -1776,6 +1778,7 @@ class vehicle
         std::vector<int> rotors;           // List of rotors
         std::vector<int> rail_wheelcache;  // List of rail wheels
         std::vector<int> steering;         // List of STEERABLE parts
+        std::vector<int> boilers;          // List of engine indices
         // List of parts that will not be on a vehicle very often, or which only one will be present
         std::vector<int> speciality;
         std::vector<int> floating;         // List of parts that provide buoyancy to boats
@@ -1919,6 +1922,8 @@ class vehicle
         bool cruise_on = true;
         // at least one engine is on, of any type
         bool engine_on = false;
+        // at least one boiler is on, of any type
+        bool boiler_on = false;
         // vehicle tracking on/off
         bool tracking_on = false;
         // vehicle has no key

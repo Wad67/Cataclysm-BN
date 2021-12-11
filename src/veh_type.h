@@ -75,6 +75,8 @@ enum vpart_bitflags : int {
     VPFLAG_RAIL,
     VPFLAG_TURRET_CONTROLS,
     VPFLAG_ROOF,
+    VPFLAG_BOILER,
+
 
     NUM_VPFLAGS
 };
@@ -128,6 +130,13 @@ struct vpslot_workbench {
     units::volume allowed_volume = 0_ml;
 };
 
+struct vpslot_boiler {
+    int conversion_rate = 0.75;
+    units::volume allowed_volume = 0_ml;
+    units::mass allowed_mass = 0_gram;
+    std::vector<itype_id> fuel_opts;
+};
+
 struct transform_terrain_data {
     std::set<std::string> pre_flags;
     std::string post_terrain;
@@ -147,6 +156,7 @@ class vpart_info
         cata::optional<vpslot_wheel> wheel_info;
         cata::optional<vpslot_rotor> rotor_info;
         cata::optional<vpslot_workbench> workbench_info;
+        cata::optional<vpslot_boiler> boiler_info;
 
     public:
         /** Translated name of a part */
@@ -353,6 +363,7 @@ class vpart_info
                                  const itype_id &fuel_type );
         static void load_wheel( cata::optional<vpslot_wheel> &whptr, const JsonObject &jo );
         static void load_workbench( cata::optional<vpslot_workbench> &wbptr, const JsonObject &jo );
+        static void load_boiler(cata::optional<vpslot_boiler>& blptr, const JsonObject& jo, const itype_id& fuel_type);
         static void load_rotor( cata::optional<vpslot_rotor> &roptr, const JsonObject &jo );
         static void load( const JsonObject &jo, const std::string &src );
         static void finalize();

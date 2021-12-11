@@ -3958,6 +3958,11 @@ int item::engine_displacement() const
     return type->engine ? type->engine->displacement : 0;
 }
 
+int item::boiler_conversion_rate() const
+{
+    return type->boiler ? type->boiler->conversion_rate : 0;
+}
+
 const std::string &item::symbol() const
 {
     return type->sym;
@@ -6426,6 +6431,12 @@ bool item::is_engine() const
 {
     return !!type->engine;
 }
+
+bool item::is_boiler() const
+{
+    return !!type->boiler;
+}
+
 
 bool item::is_wheel() const
 {

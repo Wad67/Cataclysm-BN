@@ -1658,6 +1658,20 @@ void Item_factory::load_engine( const JsonObject &jo, const std::string &src )
     }
 }
 
+void Item_factory::load(islot_boiler& slot, const JsonObject& jo, const std::string&)
+{
+    assign(jo, "conversion_rate", slot.conversion_rate);
+}
+
+void Item_factory::load_boiler(const JsonObject& jo, const std::string& src)
+{
+    itype def;
+    if (load_definition(jo, src, def)) {
+        load_slot(def.boiler, jo, src);
+        load_basic_info(jo, def, src);
+    }
+}
+
 void Item_factory::load( islot_wheel &slot, const JsonObject &jo, const std::string & )
 {
     assign( jo, "diameter", slot.diameter );

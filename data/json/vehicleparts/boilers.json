@@ -1,0 +1,41 @@
+[
+    {
+      "abstract": "vehicle_boiler",
+      "type": "vehicle_part",
+      "name": { "str": "steam boiler" },
+      "item": "steam_boiler",
+      "location": "engine_block",
+      "description": "A steam boiler.",
+      "noise_factor": 5,
+      "converstion rate": 0.5,
+
+      "fuel_type": "charcoal",
+      "symbol": "o",
+      "color": "yellow",
+      "broken_color": "red",
+      "flags": [ "BOILER", "E_HEATER" ]
+    },
+    {
+      "id": "steam_boiler",
+      "copy-from": "vehicle_boiler",
+      "type": "vehicle_part",
+      "name": { "str": "Steam Boiler" },
+      "item": "steam_boiler",
+      "durability": 400,
+      "power": 150000,
+      "energy_consumption": 0,
+      "damage_modifier": 80,
+      "requirements": {
+        "install": { "skills": [ [ "mechanics", 1 ] ], "time": "60 m", "using": [ [ "vehicle_bolt", 1 ] ] },
+        "removal": { "skills": [ [ "mechanics", 1 ] ], "time": "30 m", "using": [ [ "vehicle_bolt", 1 ] ] },
+        "repair": { "skills": [ [ "mechanics", 2 ] ], "time": "60 m", "using": [ [ "welding_standard", 5 ] ] }
+      },
+      "breaks_into": [
+        { "item": "steel_lump", "count": [ 5, 10 ] },
+        { "item": "steel_chunk", "count": [ 3, 5 ] },
+        { "item": "scrap", "count": [ 3, 5 ] }
+      ],
+      "damage_reduction": { "all": 43 }
+    }
+  ]
+  

@@ -381,9 +381,10 @@ void vehicle::add_steerable_wheels()
 
 void vehicle::init_state( int init_veh_fuel, int init_veh_status )
 {
-    // vehicle parts excluding engines are by default turned off
+    // vehicle parts excluding engines & boilers are by default turned off
     for( auto &pt : parts ) {
         pt.enabled = pt.base.is_engine();
+        pt.enabled = pt.base.is_boiler();
     }
 
     bool destroySeats = false;
@@ -1298,6 +1299,7 @@ int vehicle::power_to_energy_bat( const int power_w, const time_duration &d ) co
     energy_bat += x_in_y( std::abs( energy_j % bat_energy_j ), bat_energy_j ) ? sign : 0;
     return energy_bat;
 }
+
 
 int vehicle::vhp_to_watts( const int power_vhp )
 {
@@ -4792,6 +4794,13 @@ void vehicle::power_parts()
     }
 }
 
+void vehicle::process_boilers() {
+
+
+
+
+};
+
 vehicle *vehicle::find_vehicle( const tripoint &where )
 {
     // Is it in the reality bubble?
@@ -5091,6 +5100,14 @@ void vehicle::do_engine_damage( size_t e, int strain )
 void vehicle::idle( bool on_map )
 {
     power_parts();
+    if (boiler_on) {
+
+        // If boiler has no fuel it dies
+
+        //Otherwise if it has fuel, produce assigned resource in tank
+
+
+    };
     if( engine_on && total_power_w() > 0 ) {
         int idle_rate = alternator_load;
         if( idle_rate < 10 ) {

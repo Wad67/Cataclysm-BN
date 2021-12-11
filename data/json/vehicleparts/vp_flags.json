@@ -229,5 +229,11 @@
     "type": "json_flag",
     "context": [ "vehicle_part" ],
     "requires_flag": "ROOF"
+  },
+  {
+    "id": "BOILER",
+    "type": "json_flag",
+    "context": [ "vehicle_part" ],
+    "info": "A structure capable of creating steam from various fuels and water"
   }
 ]

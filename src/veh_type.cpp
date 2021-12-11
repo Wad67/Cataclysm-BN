@@ -104,6 +104,7 @@ static const std::unordered_map<std::string, vpart_bitflags> vpart_bitflag_map =
     { "RAIL", VPFLAG_RAIL },
     { "TURRET_CONTROLS", VPFLAG_TURRET_CONTROLS },
     { "ROOF", VPFLAG_ROOF },
+    { "BOILER", VPFLAG_BOILER }
 };
 
 static const std::vector<std::pair<std::string, veh_ter_mod>> standard_terrain_mod = {{
@@ -300,6 +301,40 @@ void vpart_info::load_workbench( cata::optional<vpslot_workbench> &wbptr, const 
     assert( wbptr );
 }
 
+void vpart_info::load_boiler(cata::optional<vpslot_boiler>& blptr, const JsonObject& jo, const itype_id& fuel_type)
+{
+    vpslot_boiler bl_info{};
+    if (blptr) {
+        bl_info = *blptr;
+    }
+
+    JsonObject bl_jo = jo.get_object("boiler");
+
+    assign(bl_jo, "conversion rate", bl_info.conversion_rate);
+    assign(bl_jo, "mass", bl_info.allowed_mass);
+    assign(bl_jo, "volume", bl_info.allowed_volume);
+
+    /** TODO: Boiler Noises, damage factor
+    assign(jo, "noise_factor", e_info.noise_factor);
+    assign(jo, "damaged_power_factor", e_info.damaged_power_factor);
+    **/
+
+
+
+    auto fuel_opts = jo.get_array("fuel_options");
+    if (!fuel_opts.empty()) {
+        bl_info.fuel_opts.clear();
+        for (const std::string line : fuel_opts) {
+            bl_info.fuel_opts.push_back(itype_id(line));
+        }
+    }
+    else if (bl_info.fuel_opts.empty() && fuel_type != itype_id("null")) {
+        bl_info.fuel_opts.push_back(fuel_type);
+    }
+    blptr = bl_info;
+    assert(blptr);
+}
+
 /**
  * Reads in a vehicle part from a JsonObject.
  */
@@ -431,6 +466,10 @@ void vpart_info::load( const JsonObject &jo, const std::string &src )
 
     if( def.has_flag( "WORKBENCH" ) ) {
         load_workbench( def.workbench_info, jo );
+    }
+
+    if (def.has_flag("BOILER")) {
+        load_boiler(def.boiler_info, jo, def.fuel_type );
     }
 
     // Dummy

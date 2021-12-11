@@ -330,6 +330,9 @@ void DynamicDataLoader::initialize()
     add( "ENGINE", []( const JsonObject & jo, const std::string & src ) {
         item_controller->load_engine( jo, src );
     } );
+    add("BOILER", [](const JsonObject& jo, const std::string& src) {
+        item_controller->load_boiler(jo, src);
+        });
     add( "WHEEL", []( const JsonObject & jo, const std::string & src ) {
         item_controller->load_wheel( jo, src );
     } );
