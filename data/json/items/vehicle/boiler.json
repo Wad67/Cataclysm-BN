@@ -1,7 +1,7 @@
 [
     {
       "abstract": "vehicle_boiler",
-      "type": "BOILER",
+      "type": "GENERIC",
       "category": "veh_parts",
       "name": { "str": "Steam boiler" },
       "material": "iron",
@@ -11,7 +11,7 @@
     {
         "id": "vehicle_boiler_steam",
         "copy-from": "vehicle_boiler",
-        "type": "BOILER",
+        "type": "GENERIC",
         "name": { "str": "Steam boiler" },
         "description": "A boiler capable of converting water to steam",
         "weight": "45000 g",
