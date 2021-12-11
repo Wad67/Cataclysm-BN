@@ -1886,6 +1886,8 @@ class vehicle
         // direction we are moving
         tileray move;
 
+
+
     private:
         bool no_refresh = false;
 

@@ -944,6 +944,10 @@ int vpart_info::rotor_diameter() const
     return has_flag( VPFLAG_ROTOR ) ? rotor_info->rotor_diameter : 0;
 }
 
+int vpart_info::conversion_rate() const
+{
+    return has_flag(VPFLAG_BOILER) ? boiler_info->conversion_rate : 0;
+}
 const cata::optional<vpslot_workbench> &vpart_info::get_workbench_info() const
 {
     return workbench_info;

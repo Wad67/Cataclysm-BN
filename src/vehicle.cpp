@@ -4795,7 +4795,15 @@ void vehicle::power_parts()
 }
 
 void vehicle::process_boilers() {
+    for (const vpart_reference &vp : get_enabled_parts( VPFLAG_BOILER )){
+        vehicle_part& pt = vp.part();
+        if (pt.info().conversion_rate() > 0) {
+            add_msg(_("The boiler is converting at a rate of ", pt.info().conversion_rate()));
+        }
+    }
+    {
 
+    }
 
 
 
@@ -5101,11 +5109,8 @@ void vehicle::idle( bool on_map )
 {
     power_parts();
     if (boiler_on) {
-
-        // If boiler has no fuel it dies
-
-        //Otherwise if it has fuel, produce assigned resource in tank
-
+        add_msg(_("You boiler emits a hiss"));
+        process_boilers();
 
     };
     if( engine_on && total_power_w() > 0 ) {

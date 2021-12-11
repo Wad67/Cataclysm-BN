@@ -323,6 +323,10 @@ class vpart_info
         /** @name rotor specific functions
         */
         int rotor_diameter() const;
+
+        /** @name boiler specific functions
+        */
+        int conversion_rate() const;
         /**
          * Getter for optional workbench info
          */
