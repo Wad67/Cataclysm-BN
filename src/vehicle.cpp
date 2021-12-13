@@ -383,8 +383,8 @@ void vehicle::init_state( int init_veh_fuel, int init_veh_status )
 {
     // vehicle parts excluding engines & boilers are by default turned off
     for( auto &pt : parts ) {
-        pt.enabled = pt.base.is_engine();
-        pt.enabled = pt.base.is_boiler();
+        pt.enabled = pt.base.is_engine() || pt.base.is_boiler();
+
     }
 
     bool destroySeats = false;
@@ -4798,7 +4798,9 @@ void vehicle::process_boilers() {
     for (const vpart_reference &vp : get_enabled_parts( VPFLAG_BOILER )){
         vehicle_part& pt = vp.part();
         if (pt.info().conversion_rate() > 0) {
+
             add_msg(_("The boiler is converting at a rate of ", pt.info().conversion_rate()));
+           // missing_joules = drain_energy( energy_in_joules)
         }
     }
     {

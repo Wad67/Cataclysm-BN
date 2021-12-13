@@ -438,8 +438,7 @@ struct islot_engine {
 };
 
 struct islot_boiler {
-    friend Item_factory;
-    friend item;
+
 
 public:
     /** boilers have a rate of conversion */

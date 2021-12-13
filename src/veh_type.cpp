@@ -317,6 +317,9 @@ void vpart_info::load_boiler(cata::optional<vpslot_boiler>& blptr, const JsonObj
     /** TODO: Boiler Noises, damage factor
     assign(jo, "noise_factor", e_info.noise_factor);
     assign(jo, "damaged_power_factor", e_info.damaged_power_factor);
+
+
+    jo.read("fuel_options", bl_info.fuel_opts) 
     **/
 
 

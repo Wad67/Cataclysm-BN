@@ -330,6 +330,7 @@ void DynamicDataLoader::initialize()
     add( "ENGINE", []( const JsonObject & jo, const std::string & src ) {
         item_controller->load_engine( jo, src );
     } );
+    //TODO: Replace with generic converter object
     add("BOILER", [](const JsonObject& jo, const std::string& src) {
         item_controller->load_boiler(jo, src);
         });
