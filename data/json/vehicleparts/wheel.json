@@ -636,5 +636,46 @@
     "rolling_resistance": 2.05,
     "proportional": { "durability": 2, "damage_modifier": 2 },
     "damage_reduction": { "all": 20 }
+  },
+  {
+    "id": "wheel_wood_steering",
+    "type": "vehicle_part",
+    "name": { "str": "steerable wooden cart wheel" },
+    "item": "wheel_wood",
+    "location": "under",
+    "symbol": "|",
+    "broken_symbol": "x",
+    "color": "brown",
+    "broken_color": "brown",
+    "durability": 30,
+    "description": "A wooden wheel.",
+    "damage_modifier": 50,
+    "breaks_into": [ { "item": "2x4", "count": [ 0, 4 ] }, { "item": "nail", "charges": [ 5, 15 ] } ],
+    "requirements": {
+      "install": { "skills": [ [ "mechanics", 0 ] ], "time": "5 m", "using": [ [ "vehicle_bolt", 1 ] ] },
+      "removal": { "skills": [ [ "mechanics", 0 ] ], "time": "5 m", "using": [ [ "vehicle_bolt", 1 ] ] },
+      "repair": { "skills": [ [ "mechanics", 2 ] ], "time": "50 s", "using": [ [ "adhesive", 1 ] ] }
+    },
+    "rolling_resistance": 2.15,
+    "wheel_type": "rigid",
+    "contact_area": 60,
+    "flags": [ "WHEEL", "NEEDS_JACKING", "STEERABLE" ],
+    "damage_reduction": { "all": 14 }
+  },
+  {
+    "id": "wheel_wood_b_steering",
+    "copy-from": "wheel_wood",
+    "type": "vehicle_part",
+    "name": { "str": "steerable banded wooden cart wheel" },
+    "item": "wheel_wood_b",
+    "location": "under",
+    "breaks_into": [
+      { "item": "2x4", "count": [ 0, 4 ] },
+      { "item": "nail", "charges": [ 5, 15 ] },
+      { "item": "scrap", "count": [ 1, 2 ] }
+    ],
+    "rolling_resistance": 2.05,
+    "proportional": { "durability": 2, "damage_modifier": 2 },
+    "damage_reduction": { "all": 20 }
   }
 ]
