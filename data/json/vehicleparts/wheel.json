@@ -638,6 +638,33 @@
     "damage_reduction": { "all": 20 }
   },
   {
+    "type": "vehicle_part",
+    "id": "wheel_mount_forged",
+    "name": { "str": "forged wheel mount" },
+    "symbol": "-",
+    "color": "light_gray",
+    "location": "axle",
+    "broken_symbol": "X",
+    "broken_color": "light_gray",
+    "damage_modifier": 80,
+    "folded_volume": 1,
+    "durability": 60,
+    "description": "A forged contact bearing and linkage that accepts a variety of steering geometries.",
+    "item": "wheel_mount_forged",
+    "requirements": {
+      "install": { "skills": [ [ "mechanics", 0 ] ], "time": "5 m", "using": [ [ "vehicle_bolt", 1 ] ] },
+      "removal": { "skills": [ [ "mechanics", 0 ] ], "time": "5 m", "using": [ [ "vehicle_bolt", 1 ] ] },
+      "repair": {
+        "skills": [ [ "mechanics", 2 ] ],
+        "time": "20 m",
+        "using": [ [ "steel_standard", 1 ]]
+      }
+    },
+    "flags": [ "WHEEL_MOUNT_FORGED", "NEEDS_JACKING", "FOLDABLE" ],
+    "breaks_into": [ { "item": "scrap", "count": [ 0, 1 ] } ],
+    "damage_reduction": { "all": 10 }
+  },
+  {
     "id": "wheel_wood_steering",
     "type": "vehicle_part",
     "name": { "str": "steerable wooden cart wheel" },
@@ -659,7 +686,7 @@
     "rolling_resistance": 2.15,
     "wheel_type": "rigid",
     "contact_area": 60,
-    "flags": [ "WHEEL", "NEEDS_JACKING", "STEERABLE" ],
+    "flags": [ "WHEEL", "NEEDS_JACKING", "STEERABLE", "NEEDS_WHEEL_MOUNT_FORGED" ],
     "damage_reduction": { "all": 14 }
   },
   {

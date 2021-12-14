@@ -1253,5 +1253,46 @@
     "using": [ [ "welding_standard", 5 ] ],
     "qualities": [ { "id": "SAW_M", "level": 1 } ],
     "components": [ [ [ "solar_panel_v2", 1 ] ], [ [ "reinforced_glass_pane", 1 ] ], [ [ "scrap", 2 ] ], [ [ "wire", 2 ] ] ]
+  },
+  {
+    "type": "recipe",
+    "result": "wheel_mount_forged",
+    "category": "CC_OTHER",
+    "subcategory": "CSC_OTHER_VEHICLE",
+    "skill_used": "fabrication",
+    "difficulty": 4,
+    "time": "10 m",
+    "autolearn": true,
+    "using": [ [ "blacksmithing_standard", 4 ], [ "steel_standard", 3 ] ],
+    "qualities": [ { "id": "CHISEL", "level": 2 } ],
+    "tools": [ [ [ "crucible", -1 ], [ "crucible_clay", -1 ] ] ]
+  },
+  {
+    "type": "recipe",
+    "result": "wheel_mount_forged",
+    "category": "CC_OTHER",
+    "subcategory": "CSC_OTHER_VEHICLE",
+    "skill_used": "fabrication",
+    "difficulty": 4,
+    "time": "10 m",
+    "autolearn": true,
+    "using": [ [ "blacksmithing_standard", 4 ], [ "steel_standard", 3 ] ],
+    "qualities": [ { "id": "CHISEL", "level": 2 } ],
+    "tools": [ [ [ "crucible", -1 ], [ "crucible_clay", -1 ] ] ]
+  },
+  {
+    "type": "recipe",
+    "result": "vehicle_boiler_steam",
+    "category": "CC_OTHER",
+    "subcategory": "CSC_OTHER_VEHICLE",
+    "skill_used": "fabrication",
+    "difficulty": 4,
+    "time": "10 m",
+    "autolearn": true,
+    "using": [ [ "blacksmithing_standard", 4 ], [ "steel_standard", 3 ] ],
+    "qualities": [ { "id": "HAMMER", "level": 2 }, { "id": "SAW_M", "level": 1 }, { "id": "WRENCH", "level": 1 },{ "id": "CHISEL", "level": 2 } ],
+    "tools": [ [ [ "crucible", -1 ], [ "crucible_clay", -1 ] ] ],
+    "components": [ [ [ "pipe", 8 ] ], [ [ "steel_plate", 2 ] ], [ [ "frame", 1 ] ] ]
   }
+
 ]

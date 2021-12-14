@@ -177,6 +177,12 @@
     "info": "You can craft here."
   },
   {
+    "id": "NEEDS_WHEEL_MOUNT_FORGED",
+    "type": "json_flag",
+    "context": [ "vehicle_part" ],
+    "requires_flag": "WHEEL_MOUNT_FORGED"
+  },
+  {
     "id": "NEEDS_WHEEL_MOUNT_LIGHT",
     "type": "json_flag",
     "context": [ "vehicle_part" ],

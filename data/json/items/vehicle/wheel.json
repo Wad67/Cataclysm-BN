@@ -374,5 +374,19 @@
     "name": { "str": "banded wooden cart wheel" },
     "description": "A wooden cart wheel with metal bands for durability, hand made.",
     "relative": { "weight": 500 }
+  },
+  {
+    "id": "wheel_mount_forged",
+    "type": "GENERIC",
+    "category": "veh_parts",
+    "name": { "str": "forged wheel mount" },
+    "description": "A forged contact bearing and linkage that accepts a variety of steering geometries.",
+    "weight": "150 g",
+    "volume": "250 ml",
+    "price": 4,
+    "price_postapoc": 6,
+    "material": [ "steel" ],
+    "symbol": ";",
+    "color": "dark_gray"
   }
 ]
