@@ -67,6 +67,7 @@
 #include "vehicle_selector.h"
 #include "weather.h"
 #include "weather_gen.h"
+#include <map_field.cpp>
 
 /*
  * Speed up all those if ( blarg == "structure" ) statements that are used everywhere;
@@ -4800,16 +4801,57 @@ void vehicle::process_boilers() {
         if (pt.info().conversion_rate() > 0) {
 
             add_msg(_("The boiler is converting at a rate of ", pt.info().conversion_rate()));
+
+
+
            // missing_joules = drain_energy( energy_in_joules)
+            int consumed = 0;
+
+
+            // How much time to add to the fire's life due to burned items/terrain/furniture
+            time_duration time_added = 0_turns;
+
+
+            // items in the part
+            cata::colony<item> items_here = pt.items;
+
+            std::vector<item> new_content;
+
+            // The highest # of items this fire can remove in one idle
+            int max_consume = 1;
+
+            for (auto fuel = items_here.begin(); fuel != items_here.end() && consumed < max_consume; ) {
+
+                //Anything that is more flammable than it weighs is destroyed
+                const units::mass old_weight = fuel->weight(false);
+                bool destroyed = fuel->flammable(old_weight.value());
+
+
+                if (destroyed) {
+                    // If we decided the item was destroyed by fire, remove it.
+                    // But remember its contents, except for irremovable mods, if any
+                    const std::list<item*> content_list = fuel->contents.all_items_top();
+                    for (item* it : content_list) {
+                        if (!it->is_irremovable()) {
+                            new_content.push_back(item(*it));
+                        }
+                    }
+                    fuel = items_here.erase(fuel);
+                    consumed++;
+                }
+                else {
+                    ++fuel;
+                }
+            }
+
+        }
+
         }
     }
-    {
-
-    }
 
 
 
-};
+
 
 vehicle *vehicle::find_vehicle( const tripoint &where )
 {
